@@ -1,0 +1,44 @@
+{
+  "$description": "Candy, Keyling's default theme: dark navy with a color per app. Design Tokens Format (DTCG): colors are sRGB hex.",
+  "color": {
+    "$type": "color",
+    "background": { "$value": "#15172B", "$description": "Screen background (dark navy)" },
+    "surface": { "$value": "#24274A", "$description": "Cards, list items, unfilled progress" },
+    "text": { "$value": "#FFFFFF", "$description": "Main text and icons" },
+    "text-dim": { "$value": "#8A8FB8", "$description": "Secondary text, labels" },
+    "accent": { "$value": "#7C9CFF", "$description": "Focus and headers without an app color" },
+    "good": { "$value": "#7CF29A", "$description": "Approve, success, connected computer" },
+    "bad": { "$value": "#FF6B6B", "$description": "Erase, errors, refusals" },
+    "warn": { "$value": "#FFD166", "$description": "Warnings, locked profile" },
+    "bluetooth-connected": { "$value": "#4D9BFF", "$description": "Bluetooth symbol while a phone is connected" },
+    "settings": { "$value": "#FFD166", "$description": "Settings, which is always there, has its own color" },
+    "app": {
+      "$description": "Every other app takes these in launcher order (built-in apps first), starting over after the last",
+      "1": { "$value": "#FF6B6B" },
+      "2": { "$value": "#4ECDC4" },
+      "3": { "$value": "#5BC0EB" },
+      "4": { "$value": "#B28DFF" },
+      "5": { "$value": "#FF9F43" },
+      "6": { "$value": "#F78FB3" }
+    }
+  },
+  "radius": {
+    "$type": "dimension",
+    "item": { "$value": "8px", "$description": "List items and cards" },
+    "pill": { "$value": "6px", "$description": "Status pills on the home screen (profile, Bluetooth and USB)" },
+    "badge": { "$value": "999px", "$description": "Fully round: site badges on security key prompts" }
+  },
+  "tile-radius-ratio": {
+    "$type": "number",
+    "$value": 0.25,
+    "$description": "App tiles' corner radius as a share of the tile's size"
+  },
+  "font": {
+    "$type": "fontFamily",
+    "ui": { "$value": ["Montserrat", "sans-serif"], "$description": "All text (OFL-1.1)" },
+    "site": {
+      "$value": ["Atkinson Hyperlegible Mono", "monospace"],
+      "$description": "Site names on security key prompts: monospaced, every look-alike character distinct (OFL-1.1)"
+    }
+  }
+}

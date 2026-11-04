@@ -1,0 +1,14 @@
+{
+  "$description": "The dongle's status LED, the same in every theme: colors at full brightness (the dongle dims them). Design Tokens Format (DTCG).",
+  "color": {
+    "$type": "color",
+    "advertising": { "$value": "#0000FF", "$description": "Slow pulse: waiting for the phone" },
+    "pairing": { "$value": "#FF8000", "$description": "Fast blink: pairing window open" },
+    "connected": { "$value": "#00FF00", "$description": "Short glow when the phone connects" },
+    "error": { "$value": "#FF0000", "$description": "Three blinks" },
+    "security-key": { "$value": "#FF00FF", "$description": "Double blink: a security key request waits for a touch" },
+    "eject-start": { "$value": "#00E0C0", "$description": "Drive ejected: a sweep from this…" },
+    "eject-middle": { "$value": "#0040FF", "$description": "…through this…" },
+    "eject-end": { "$value": "#A000FF", "$description": "…to this, fading out, twice" }
+  }
+}
