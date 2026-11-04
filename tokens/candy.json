@@ -7,6 +7,7 @@
     "text": { "$value": "#FFFFFF", "$description": "Main text and icons" },
     "text-dim": { "$value": "#8A8FB8", "$description": "Secondary text, labels" },
     "accent": { "$value": "#7C9CFF", "$description": "Focus and headers without an app color" },
+    "on-accent": { "$value": "#15172B", "$description": "Text and icons on accent, good, bad, warn and app colors" },
     "good": { "$value": "#7CF29A", "$description": "Approve, success, connected computer" },
     "bad": { "$value": "#FF6B6B", "$description": "Erase, errors, refusals" },
     "warn": { "$value": "#FFD166", "$description": "Warnings, locked profile" },
