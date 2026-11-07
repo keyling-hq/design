@@ -25,6 +25,33 @@ git submodule update --remote design      # pick up newer tokens, then regenerat
 The firmware's `tools/gen_tokens.py` writes C headers from it, and its CI fails when they are out
 of date.
 
+## Logo
+
+`logo/marks.html` is the design board: its script draws every mark, and the files next to it are
+generated from it.
+
+- `keyling-logo.svg` / `-white.svg`: the logo (mark H1g), a keycap charm on a key ring with a
+  cylinder key. One filled path each, no masks or strokes, 512 px.
+- `ling-happy.svg` / `-white.svg`: Ling, the keycap as a character (mark C2).
+- `kp2a-plugin.svg` / `-white.svg`, `kp2a-plugin-icon.svg`: the KeePass2Android plugin's mark (P5)
+  and its icon on the periwinkle tile.
+- `github-avatar.svg` / `.png`: the organization's avatar, white on navy.
+
+The main tile is navy `#15172B` with a white mark.
+
+To regenerate them after changing the board, run `tools/build_icons.py`. It needs node, and Python
+with `shapely` and `svgelements`. With the projects' paths it also writes their Android icons; from
+this repository checked out as the android repository's `design/` submodule:
+
+```sh
+python tools/build_icons.py --hub ../hub/src/main/res \
+    --plugin ../../kp2a-plugin/app/src/main/res --plugin-logo ../../kp2a-plugin/logo
+```
+
+`tools/export_marks.js` exports marks from the board as masked SVGs, and `tools/flatten.py` turns
+those into single filled outlines, since Android's vector drawables have no masks. PNGs are not
+generated: render them from the SVGs at the size needed.
+
 ## Rules
 
 - A theme is one tokens file. Other themes, and later themes the dongle loads from files, use the
@@ -42,3 +69,7 @@ of date.
 
 MIT, see `LICENSE`. The fonts named in the tokens are not part of this repository and keep their
 own licenses (SIL Open Font License 1.1).
+
+`logo/kp2a-plugin*.svg` carries the Android robot's head. The Android robot is reproduced or
+modified from work created and shared by Google and used according to terms described in the
+[Creative Commons 3.0 Attribution License](https://creativecommons.org/licenses/by/3.0/).

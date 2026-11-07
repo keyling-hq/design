@@ -1,0 +1,921 @@
+<title>Keyling Marks</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Atkinson+Hyperlegible+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a design-review board. Brief and device up top, then concept sheets in a two-column grid, each sheet showing the mark in every place it will live. Colors are Keyling's Candy tokens. */
+:root {
+  --bg: #F4F5FB;
+  --surface: #FFFFFF;
+  --text: #15172B;
+  --dim: #5A5F86;
+  --accent: #3F5FE0;
+  --line: #DFE2F0;
+  --well: #E9EBF6;
+  --font-ui: "Montserrat", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Atkinson Hyperlegible Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --tile-bg: #15172B;
+  --tile-fg: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #15172B; --surface: #1D2040; --text: #FFFFFF; --dim: #8A8FB8;
+    --accent: #7C9CFF; --line: #2E3260; --well: #24274A;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #15172B; --surface: #1D2040; --text: #FFFFFF; --dim: #8A8FB8;
+  --accent: #7C9CFF; --line: #2E3260; --well: #24274A;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.55;
+  padding-block: 40px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 48px; }
+h1, h2, h3 { margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 800; line-height: 1.1; }
+h2 { font-size: 22px; font-weight: 700; }
+h3 { font-size: 18px; font-weight: 700; }
+p { margin: 0; max-width: 66ch; }
+.label {
+  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--dim);
+}
+.dim { color: var(--dim); }
+section { display: flex; flex-direction: column; gap: 20px; }
+
+/* header */
+header { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px 48px; align-items: end; }
+header .lede { display: flex; flex-direction: column; gap: 14px; }
+.meanings { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.meaning { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+.meaning b { font-size: 15px; }
+.meaning span { font-size: 13px; color: var(--dim); line-height: 1.45; }
+
+/* device */
+.device { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 24px 40px; align-items: start; }
+.device-fig { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+.device-fig svg { display: block; width: 100%; min-width: 520px; height: auto; }
+.device-fig .ink { fill: none; stroke: var(--text); stroke-width: 2; }
+.device-fig .fillbody { fill: var(--well); stroke: var(--text); stroke-width: 2; }
+.device-fig .screen { fill: #15172B; }
+.device-fig .note { fill: var(--dim); font-family: var(--font-mono); font-size: 13px; }
+.device-fig .dimline { stroke: var(--dim); stroke-width: 1; fill: none; }
+.device-fig .lead { stroke: var(--dim); stroke-width: 1; fill: none; stroke-dasharray: 3 3; }
+.places { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.places li { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.places li:first-child { border-top: 1px solid var(--line); }
+.places .spec { font-family: var(--font-mono); font-size: 12.5px; color: var(--dim); font-variant-numeric: tabular-nums; }
+
+/* controls */
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 12px; border-bottom: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.seg { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.seg button {
+  font: 600 13px var(--font-ui); color: var(--text); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px 6px 8px;
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+}
+.seg button[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.swatch { width: 18px; height: 18px; border-radius: 50%; display: inline-grid; place-items: center; }
+.swatch i { width: 7px; height: 7px; border-radius: 50%; }
+
+/* concepts */
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.sheet {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: 20px; display: flex; flex-direction: column; gap: 18px;
+}
+.sheet.baseline { border-style: dashed; }
+.sheet-head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; align-items: baseline; }
+.letter { font-family: var(--font-mono); font-weight: 600; font-size: 13px; color: var(--accent); border: 1px solid var(--accent); border-radius: 6px; padding: 1px 7px; }
+.sheet-head p { grid-column: 2; font-size: 14px; color: var(--dim); }
+.renders { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.render { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.render .label { font-size: 10.5px; }
+.icon { width: 100%; max-width: 120px; aspect-ratio: 1; display: block; color: var(--tile-fg); }
+.icon.circle { border-radius: 50%; }
+.icon.squircle { border-radius: 28%; }
+.icon.themed { border-radius: 50%; color: #27325E; }
+.row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); gap: 16px; align-items: center; }
+.sizes { display: flex; flex-direction: column; gap: 8px; }
+.sizes-row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; }
+.sizes-row.on-light { background: #F4F5FB; color: #15172B; }
+.sizes-row.on-dark { background: #0E1020; color: #FFFFFF; }
+.sizes-row svg { display: block; flex: none; }
+.sizes-row .label { color: inherit; opacity: .6; margin-left: auto; font-size: 10px; }
+.bezel { background: #0B0C14; border-radius: 12px; padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; }
+.bezel canvas { display: block; width: 100%; aspect-ratio: 2 / 1; image-rendering: pixelated; border-radius: 2px; }
+.bezel .label { color: #8A8FB8; font-size: 10px; }
+.lockup { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: var(--well); border-radius: 10px; }
+.lockup svg { width: 46px; height: 46px; flex: none; color: var(--text); }
+.lockup .word .light { font-weight: 400; }
+.lockup .word { font-weight: 700; font-size: 30px; letter-spacing: -0.02em; line-height: 1; }
+.verdict { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; font-size: 13.5px; line-height: 1.45; }
+.verdict div { display: flex; flex-direction: column; gap: 3px; }
+
+/* animated details on the big tile only */
+@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+@keyframes caret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+.animate .eye { transform-box: fill-box; transform-origin: center; animation: blink 4.5s infinite; }
+.animate .caret { animation: caret 1.1s steps(1) infinite; }
+@media (prefers-reduced-motion: reduce) { .animate .eye, .animate .caret, .led { animation: none !important; } }
+
+/* wordmarks */
+.words { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.word-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px 20px 18px; display: flex; flex-direction: column; gap: 16px; }
+.wm { font-family: var(--font-ui); font-size: clamp(40px, 7vw, 60px); line-height: 1; letter-spacing: -0.025em; font-weight: 700; padding-top: .12em; }
+.wm .light { font-weight: 400; }
+.wm .i { position: relative; display: inline-block; }
+.wm .dot { position: absolute; left: 50%; top: .02em; transform: translateX(-50%); }
+.wm .dot.led { width: .2em; height: .2em; border-radius: 50%; background: #4D9BFF; box-shadow: 0 0 .18em .04em #4D9BFF; animation: pulse 2.8s ease-in-out infinite; }
+.wm .dot.cap { width: .2em; height: .2em; border-radius: .05em; background: var(--accent); }
+.wm .y { color: var(--accent); }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+.word-card p { font-size: 13.5px; color: var(--dim); }
+
+.next { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+.next ol { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 6px; max-width: 70ch; }
+
+@media (max-width: 960px) {
+  header, .device { grid-template-columns: 1fr; }
+  .grid, .words { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .meanings { grid-template-columns: 1fr; }
+  .row2, .verdict { grid-template-columns: 1fr; }
+  .places li { grid-template-columns: 1fr; gap: 2px; }
+}
+.anatomy { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.anatomy figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+.anatomy svg { width: 100%; max-width: 150px; aspect-ratio: 1; align-self: center; color: var(--text); }
+.anatomy figcaption { font-size: 13.5px; color: var(--dim); line-height: 1.45; }
+.anatomy figcaption b { color: var(--text); display: block; }
+.family { display: flex; flex-direction: column; gap: 16px; }
+.family + .family { margin-top: 20px; }
+@media (max-width: 720px) { .anatomy { grid-template-columns: 1fr; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="lede">
+      <span class="label">Keyling identity · selected</span>
+      <h1>Keycap logos for keyling</h1>
+      <p class="dim">The logo: a keycap with a k legend, hanging from a key ring beside a cylinder key. Ling is the happy one, for the dongle's screens. The wordmark sets "key" in bold and "ling" in regular Montserrat.</p>
+    </div>
+    <div class="meanings">
+      <div class="meaning"><span class="label">logo</span><b>Keycap on a keychain</b><span>App icon, GitHub, README. Still being chosen.</span></div>
+      <div class="meaning"><span class="label">character</span><b>Happy Ling</b><span>The dongle's screens, and wherever the brand can be playful.</span></div>
+      <div class="meaning"><span class="label">wordmark</span><b>key<span style="font-weight:400">ling</span></b><span>Montserrat, bold and regular. The face the app and the dongle already use.</span></div>
+    </div>
+  </header>
+
+  <section aria-labelledby="an-h">
+    <h2 id="an-h">One keycap, two views</h2>
+    <div class="anatomy" id="anatomy"></div>
+  </section>
+
+  <section aria-labelledby="c-h">
+    <div class="controls">
+      <h2 id="c-h" style="margin-right:auto">Marks</h2>
+      <span class="label">Icon tile</span>
+      <div class="seg" id="tiles" role="group" aria-label="Icon tile color"></div>
+    </div>
+    <div id="families"></div>
+  </section>
+
+  <section aria-labelledby="w-h">
+    <h2 id="w-h">Wordmark</h2>
+    <p class="dim">W3: "key" in Montserrat Bold, "ling" in Regular, tightened. W2 and W4 were dropped because a dot over the i reads like LinkedIn's mark.</p>
+    <div class="words">
+      <div class="word-card"><div class="wm">key<span class="light">ling</span></div><p>On the page background.</p></div>
+      <div class="word-card" style="background:#15172B;border-color:#15172B"><div class="wm" style="color:#FFFFFF">key<span class="light">ling</span></div><p style="color:#8A8FB8">On Candy navy, as on the dongle.</p></div>
+    </div>
+  </section>
+
+  <div class="next">
+    <h2>Still open</h2>
+    <ol>
+      <li>The logo: the top-down keycap key, or one of the three-quarter versions (Q1–Q4).</li>
+      <li>The icon tile color: navy, periwinkle or teal (the switcher above).</li>
+      <li>Then the files: the adaptive launcher icon and its monochrome layer, the notification icon, a KP2A plugin variant, Happy Ling for the dongle's screen, and SVGs for GitHub and the README.</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+const TILES = [
+  { id: "navy", name: "Navy", bg: "#15172B", fg: "#FFFFFF" },
+  { id: "peri", name: "Periwinkle", bg: "#7C9CFF", fg: "#15172B" },
+  { id: "mint", name: "Teal", bg: "#4ECDC4", fg: "#15172B" },
+  { id: "current", name: "Current blue", bg: "#2E5E8C", fg: "#FFFFFF" },
+];
+
+/* Geometry helpers on the 108-unit adaptive-icon grid. */
+const f = n => +n.toFixed(2);
+function toward(P, Q, r) {
+  const dx = Q[0] - P[0], dy = Q[1] - P[1], len = Math.hypot(dx, dy), k = Math.min(r, len / 2) / len;
+  return `${f(P[0] + dx * k)} ${f(P[1] + dy * k)}`;
+}
+function roundPoly(pts, r) {
+  return pts.map((P, i) => {
+    const A = pts[(i - 1 + pts.length) % pts.length], B = pts[(i + 1) % pts.length];
+    return `${i ? "L" : "M"}${toward(P, A, r)}Q${P[0]} ${P[1]} ${toward(P, B, r)}`;
+  }).join("") + "Z";
+}
+const rr = (x, y, w, h, r) => roundPoly([[x, y], [x + w, y], [x + w, y + h], [x, y + h]], r);
+const circ = (cx, cy, r) => `M${cx - r} ${cy}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0Z`;
+const cross = (cx, cy, len, t) => {
+  const a = len / 2, b = t / 2;
+  return `M${cx - a} ${cy - b}H${cx - b}V${cy - a}H${cx + b}V${cy - b}H${cx + a}V${cy + b}H${cx + b}V${cy + a}H${cx - b}V${cy + b}H${cx - a}Z`;
+};
+
+/* The keycap, three-quarter view, as solid pieces split by gaps: a large face standing above the shoulders,
+   thin side walls with a steep chamfer, and a skirt that widens to a rounded base. Drawn in an 835-unit box.
+   The face's top edge dips and its bottom edge bows down, like a dished top seen from the front. */
+const CAP_FACE = "M160 610Q419 654 678 610Q712 612 716 645L737 1035Q735 1075 690 1078Q419 1134 148 1078Q100 1072 100 1035L118 650Q122 612 160 610Z";
+const CAP_GAP = "M150 578Q420 622 690 578Q745 582 748 640L770 1040Q768 1108 695 1110Q418 1166 140 1110Q68 1105 68 1040L86 640Q90 580 150 578Z";
+const CAP_BODY = "M90 670L35 800L2 1268Q0 1320 55 1325H782Q835 1322 835 1270L800 800L745 665L700 800H135Z";
+const CAP_SLITS = "M84 1098L30 1268M752 1098L806 1268";
+const line = (d, w) => `<path d="${d}" fill="none" stroke="#000" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+const CAP_T = 'transform="translate(28 31.7) scale(0.0623) translate(0 -610)"';
+const capCut = (slits) => `<path d="${CAP_GAP}"/>${slits ? line(CAP_SLITS, 30) : ""}`;
+const dot = (cx, cy, r) => `M${cx - r} ${cy}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0Z`;
+const arch = (cx, cy, R, r) => `M${cx - R} ${cy}A${R} ${R} 0 0 1 ${cx + R} ${cy}H${cx + r}A${r} ${r} 0 0 0 ${cx - r} ${cy}Z`;
+const EYES = dot(330, 870, 52) + dot(506, 870, 52);
+const HAPPY = arch(330, 895, 66, 28) + arch(506, 895, 66, 28);
+const WINK = dot(330, 870, 52) + arch(506, 895, 66, 28);
+const face = (holes = "") => `<path fill-rule="evenodd" d="${CAP_FACE}${holes}"/>`;
+const cap = (tf, slits, holes) => ({
+  fill: `<g ${tf}><path d="${CAP_BODY}"/></g>`,
+  cut: `<g ${tf}>${capCut(slits)}</g>`,
+  top: `<g ${tf}>${face(holes)}</g>`,
+});
+
+/* The keycap from above: the footprint with the face inset, front wall a little thicker than the back.
+   Top and bottom edges bow downward by the same dish. */
+const sq = (x, y, w, h, r, s) =>
+  `M${x + r} ${y}Q${x + w / 2} ${y + 2 * s} ${x + w - r} ${y}Q${x + w} ${y} ${x + w} ${y + r}V${y + h - r}` +
+  `Q${x + w} ${y + h} ${x + w - r} ${y + h}Q${x + w / 2} ${y + h + 2 * s} ${x + r} ${y + h}Q${x} ${y + h} ${x} ${y + h - r}V${y + r}Q${x} ${y} ${x + r} ${y}Z`;
+function topCap(x, y, S) {
+  const fx = x + S * 0.15, fy = y + S * 0.12, fw = S * 0.7, fh = S * 0.7;
+  const outer = sq(x, y, S, S, S * 0.22, S * 0.04);
+  const faceP = sq(fx, fy, fw, fh, S * 0.13, S * 0.04);
+  const k = S * 0.04, j = S * 0.065;
+  const bevels = `M${fx + k} ${fy + k}L${x + j} ${y + j}M${fx + fw - k} ${fy + k}L${x + S - j} ${y + j}` +
+    `M${fx + fw - k} ${fy + fh - k}L${x + S - j} ${y + S - j}M${fx + k} ${fy + fh - k}L${x + j} ${y + S - j}`;
+  return { outer, faceP, bevels, gap: S * 0.075 };
+}
+const SIDE = topCap(22, 39, 30);
+const SHAFT_SIDE = `<path d="M51 51H86v6H51zM72 57h5v7h-5zM80 57h5v5h-5z"/>`;
+const HANG = topCap(40, 21, 28);
+const SHAFT_HANG = `<path d="M51 48h6v38h-6zM57 69h7v5h-7zM57 77h5v5h-5z"/>`;
+const solidKey = (c, shaft, bevels) => ({
+  fill: `<path d="${c.outer}"/>${shaft}`,
+  cut: line(c.faceP, c.gap) + (bevels ? line(c.bevels, c.gap * 0.8) : ""),
+});
+
+/* A rounded polygon whose first edge (top) and third edge (bottom) bow downward by s. */
+function dishPoly(pts, r, s) {
+  const n = pts.length;
+  const c = pts.map((P, i) => ({ P, a: toward(P, pts[(i - 1 + n) % n], r), b: toward(P, pts[(i + 1) % n], r) }));
+  let d = `M${c[0].a}Q${c[0].P[0]} ${c[0].P[1]} ${c[0].b}`;
+  for (let i = 1; i <= n; i++) {
+    const k = i % n, A = pts[i - 1], B = pts[k];
+    d += (i - 1 === 0 || i - 1 === 2)
+      ? `Q${f((A[0] + B[0]) / 2)} ${f((A[1] + B[1]) / 2 + 2 * s)} ${c[k].a}`
+      : `L${c[k].a}`;
+    if (k !== 0) d += `Q${c[k].P[0]} ${c[k].P[1]} ${c[k].b}`;
+  }
+  return d + "Z";
+}
+const KEY_BLADE = (x) => `<path d="M${x} 51H86v6H${x}zM72 57h5v7h-5zM80 57h5v5h-5z"/>`;
+const V1 = "M28 40h16a6 6 0 0 1 6 6v16a6 6 0 0 1-6 6H28a6 6 0 0 1-6-6V46a6 6 0 0 1 6-6zM30 44h12a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H30a3 3 0 0 1-3-3V47a3 3 0 0 1 3-3z";
+const V1_DISH = sq(22, 40, 28, 28, 6, 1.2) + sq(27, 44, 18, 16, 3, 1.2);
+const V2_PTS = [
+  [[27, 38], [47, 38], [52, 70], [22, 70]],
+  [[29, 40.5], [45, 40.5], [46.5, 58.5], [27.5, 58.5]],
+  [[31, 42.5], [43, 42.5], [44, 56.5], [30, 56.5]],
+];
+const V2 = roundPoly(V2_PTS[0], 5) + roundPoly(V2_PTS[1], 5) + roundPoly(V2_PTS[2], 3.5);
+const V2_DISH = dishPoly(V2_PTS[0], 5, 1.1) + dishPoly(V2_PTS[1], 5, 1.1) + dishPoly(V2_PTS[2], 3.5, 1.1);
+
+const LOGO_FAMILY = {
+  name: "A · Logo: the keycap key",
+  marks: [
+    {
+      id: "1", name: "Round 1, as drawn",
+      idea: "A keycap from above as the key's bow, the face cut out with a thicker front wall, and the blade off to the side.",
+      works: "The simplest of the four. The hollow face doubles as the key's ring, and it holds up at every size.",
+      watch: "With straight edges the bow is close to a plain rounded square.",
+      fill: `<path fill-rule="evenodd" d="${V1}"/>${KEY_BLADE(50)}`,
+    },
+    {
+      id: "1+", name: "Round 1, dished",
+      idea: "The same bow with its top and bottom edges bowed downward, like Ling's face.",
+      works: "The dish ties it to Ling and makes the square unmistakably a keycap.",
+      watch: "The curve is small. Below 24 px it's the plain version again, which is fine.",
+      fill: `<path fill-rule="evenodd" d="${V1_DISH}"/>${KEY_BLADE(50)}`,
+    },
+    {
+      id: "2", name: "Round 2, as drawn",
+      idea: "A three-quarter keycap as the bow, wider at the base, with the solid face set off by a gap.",
+      works: "The tapered silhouette says keycap even at 16 px, and it's the closest cousin to Ling.",
+      watch: "The bottom-heavy bow needs the blade's teeth to balance it.",
+      fill: `<path fill-rule="evenodd" d="${V2}"/>${KEY_BLADE(48)}`,
+    },
+    {
+      id: "2+", name: "Round 2, dished",
+      idea: "The same bow with the dish: the top edges dip and the bottom edges bow down.",
+      works: "Shares Ling's dish and taper, so the logo and the character look drawn by the same hand.",
+      watch: "The most detail of the four. The gap and the dish both disappear at 16 px, which leaves round 2's silhouette.",
+      fill: `<path fill-rule="evenodd" d="${V2_DISH}"/>${KEY_BLADE(48)}`,
+    },
+  ],
+};
+
+const EXPLORED = [
+  LOGO_FAMILY,
+  {
+    name: "C · Ling: the keycap in three-quarter view",
+    marks: [
+      {
+        id: "C1", name: "Ling",
+        idea: "The keycap with round eyes on its dished face.",
+        works: "The big face gives the eyes room, and the gaps keep it clearly a keycap.",
+        watch: "Says keyboard, not password. That's fine for a character beside the logo.",
+        ...cap(CAP_T, true, EYES),
+      },
+      {
+        id: "C2", name: "Happy Ling",
+        idea: "Closed, smiling eyes. This is the \"typed it\" face.",
+        works: "A second expression for the dongle when typing finishes.",
+        watch: "The arcs thin out below 24 px. Better as an expression than as an icon.",
+        ...cap(CAP_T, true, HAPPY),
+      },
+      {
+        id: "C3", name: "Winking Ling",
+        idea: "One eye open, one closed: the \"your secret's safe\" face.",
+        works: "Hints at passwords and discretion without a lock symbol.",
+        watch: "A wink is a strong personality for a security product.",
+        ...cap(CAP_T, true, WINK),
+      },
+      {
+        id: "C4", name: "Ling, no slits",
+        idea: "C1 without the slits, for small sizes.",
+        works: "Cleanest silhouette. Holds up at 16 px.",
+        watch: "Flatter. The walls and skirt merge into one band.",
+        ...cap(CAP_T, false, EYES),
+      },
+    ],
+  },
+];
+
+/* Round 1's bow with a thinner top wall. The blade overlaps the bow so no seam shows where they meet. */
+const LOGO_BOW = "M28 40h16a6 6 0 0 1 6 6v16a6 6 0 0 1-6 6H28a6 6 0 0 1-6-6V46a6 6 0 0 1 6-6zM30 42.8h12a3 3 0 0 1 3 3v11.2a3 3 0 0 1-3 3H30a3 3 0 0 1-3-3V45.8a3 3 0 0 1 3-3z";
+const LOGO = {
+  id: "K", name: "Keyling",
+  idea: "A keycap from above as the key's bow: a thin back wall, a thicker front wall, and the blade off to the side.",
+  works: "Simple enough for 16 px and the notification icon. The hollow face doubles as the key's ring.",
+  watch: "The thin top wall is about 0.4 px at 16 px. It may need a slightly heavier cut for the smallest sizes.",
+  fill: `<path fill-rule="evenodd" d="${LOGO_BOW}"/><path d="M47 51H86v6H47zM72 57h5v7h-5zM80 57h5v5h-5z"/>`,
+};
+/* Ling's three-quarter keycap as the key's bow, two-tone like the logo: the walls and skirt solid, the face cut out.
+   CAP_RIM raises the top edge so the back wall is thick enough for small sizes. */
+const CAP_RIM = "M150 548Q420 592 690 548Q750 552 754 615L770 1040Q768 1108 695 1110Q418 1166 140 1110Q68 1105 68 1040L82 615Q86 550 150 548Z";
+const Q_T = 'transform="translate(20 41.2) scale(0.04) translate(0 -610)"';
+const Q_BLADE = `<path d="M51 51H86v6H51zM72 57h5v7h-5zM80 57h5v5h-5z"/>`;
+const qKey = (rim, slits) => ({
+  fill: `<g ${Q_T}><path d="${CAP_BODY}"/><path d="${rim}"/></g>${Q_BLADE}`,
+  cut: `<g ${Q_T}><path d="${CAP_FACE}"/>${slits ? line(CAP_SLITS, 34) : ""}</g>`,
+});
+const QUARTER = [
+  {
+    id: "Q1", name: "Hollow, thin back wall",
+    idea: "Ling's keycap with its face cut out: a thin back wall over the dish, a thick front skirt, and the blade off to the side.",
+    works: "The same two-tone reading as the logo, and the same keycap as Ling, so the two are clearly one family.",
+    watch: "The back wall is Ling's gap, about a quarter pixel at 16 px. It will vanish at small sizes.",
+    ...qKey(CAP_GAP, false),
+  },
+  {
+    id: "Q2", name: "Hollow, thicker back wall",
+    idea: "Q1 with the back wall raised to about the logo's top-wall weight.",
+    works: "Holds together at 24 px and the notification size. Still noticeably thinner than the front skirt.",
+    watch: "The top edge sits a little higher than on Ling, so they're not identical drawings.",
+    ...qKey(CAP_RIM, false),
+  },
+  {
+    id: "Q3", name: "Hollow with slits",
+    idea: "Q2 plus Ling's two slits splitting the walls from the skirt.",
+    works: "The most three-dimensional. Very close to the silhouette reference.",
+    watch: "The slits close up below 24 px, so the small sizes want Q2.",
+    ...qKey(CAP_RIM, true),
+  },
+  {
+    id: "Q4", name: "Solid face",
+    idea: "For comparison: Ling's own drawing without eyes, the face solid and set off by a gap.",
+    works: "Identical to Ling, minus the face.",
+    watch: "Not two-tone like the logo. The gap is the only cut, so it reads darker and heavier.",
+    fill: `<g ${Q_T}><path d="${CAP_BODY}"/></g>${Q_BLADE}`,
+    cut: `<g ${Q_T}><path d="${CAP_GAP}"/>${line(CAP_SLITS, 34)}</g>`,
+    top: `<g ${Q_T}><path d="${CAP_FACE}"/></g>`,
+  },
+];
+/* One outline for the hollow keycap: the dished back edge rounds straight into the chamfered shoulders,
+   so the back wall and the side walls join. */
+const Q_SIL = "M150 578Q420 622 690 578Q740 578 752 620L800 800L835 1270Q835 1322 782 1325H55Q0 1320 2 1268L35 800L83 620Q95 578 150 578Z";
+/* The face, smaller than Ling's: its front edge a little below the keycap's middle, with thicker side walls. */
+const Q_FACE = "M195 612Q419 656 643 612Q682 614 686 650L692 920Q690 955 652 958Q419 1012 186 958Q148 955 146 920L152 650Q156 614 195 612Z";
+/* A lowercase k placed by a real keycap's measurements: a 14 mm deep face, a 4 mm legend 3 mm from the back edge.
+   The face is 351 units deep at its center line (about 25 per mm) and about 43 units per mm across. */
+const kLegend = (mm) => {
+  const sx = mm * 43 / 200, sy = mm * 25.1 / 200, top = 634 + 3 * 25.1;
+  return `<g transform="translate(418 ${f(top + mm * 25.1 / 2)}) scale(${f(sx)} ${f(sy)})"><path d="M-52 -100V100M52 -28L-52 60M-6 22L56 100" fill="none" stroke="#000" stroke-width="36" stroke-linejoin="miter"/></g>`;
+};
+const Q_K = kLegend(5.5);
+const qBody = (blade, bladeCut = "") => ({
+  fill: `<g ${Q_T}><path d="${Q_SIL}"/></g>${blade}`,
+  cut: `<g ${Q_T}><path d="${Q_FACE}"/></g>${bladeCut}`,
+  top: `<g ${Q_T}>${Q_K.replace('stroke="#000"', 'stroke="currentColor"')}</g>`,
+});
+
+/* Two square teeth, the tip tooth flush with the end of the blade. tip: where the blade ends; w: tooth width;
+   gap: space between the teeth; d1, d2: how far the tip tooth and the inner tooth reach down. */
+const teeth = (tip, w, gap, d1, d2) =>
+  `<path d="M50 51H${tip}V${d1}H${tip - w}V57H${tip - w - gap}V${d2}H${tip - 2 * w - gap}V57H50Z"/>`;
+/* Shorter blades shift the whole mark right so it stays centered in the icon. */
+const shifted = (m, dx) => dx ? Object.fromEntries(Object.entries(m).map(([k, v]) =>
+  [k, ["fill", "cut", "top"].includes(k) && v ? `<g transform="translate(${dx} 0)">${v}</g>` : v])) : m;
+const T = (tip, ...rest) => shifted(qBody(teeth(tip, ...rest)), (86 - tip) / 2);
+/* Skeleton-key blades: a round shaft, collars by the bow, and a bit at the tip cut with wards.
+   Cut-outs in the bit echo the keycap's hollow face. */
+const p = (d) => `<path d="${d}"/>`;
+const shaft = (tip) => rr(50, 52.5, tip - 50, 3, 1.2);
+const COLLARS = rr(53.5, 49, 3, 10, 1.2) + rr(58, 50.5, 2, 7, 1);
+const bit = (x0, tip, bottom) => rr(x0, 53, tip - x0, bottom - 53, 1.5);
+const castle = (x0) => p(`M${x0 + 3} 60h2v7h-2zM${x0 + 7} 60h2v7h-2z`);
+const windowWard = (x0) => p(rr(x0 + 3, 56, 6, 4, 1) + `M${x0 + 5} 62h2v5h-2z`);
+const skel = (tip, collar, bitD, cut) => shifted(qBody(p(shaft(tip) + collar + bitD), cut), (86 - tip) / 2);
+const RING = circ(57, 54, 4.6);
+const Q_MARKS = [
+  {
+    id: "S1", name: "Castle bit",
+    idea: "A round shaft with two collars by the keycap, and a bit at the tip cut into three prongs.",
+    works: "Has the detail of a skeleton key without being ornate. The collars make a neck between keycap and blade.",
+    watch: "The slots between the prongs are 2 units wide and close up at 16 px.",
+    ...skel(86, COLLARS, bit(74, 86, 66), castle(74)),
+  },
+  {
+    id: "S2", name: "Window bit",
+    idea: "The bit has a window cut through it and a notch below, so it is hollow like the keycap's face.",
+    works: "The keycap and the bit are both two-tone shapes, so the blade belongs to the same drawing.",
+    watch: "The window needs 24 px or more to show.",
+    ...skel(86, COLLARS, bit(74, 86, 66), windowWard(74)),
+  },
+  {
+    id: "S3", name: "Ring collar",
+    idea: "A hollow ring as the collar, echoing the keycap's hollow face, with the castle bit at the tip.",
+    works: "The ring repeats the keycap's two-tone look halfway along the key. Reads as a classic key.",
+    watch: "Three separate features (keycap, ring, bit) may be one too many at small sizes.",
+    ...skel(86, RING, bit(74, 86, 66), castle(74) + p(circ(57, 54, 2.1))),
+  },
+  {
+    id: "S4", name: "Stepped bit",
+    idea: "Two collars and a bit whose underside steps down toward the tip, like a cut lever-lock key.",
+    works: "More like a real cut key than the prongs, still drawn in flat steps.",
+    watch: "Busy at 16 px.",
+    ...skel(86, COLLARS, roundPoly([[74, 53], [86, 53], [86, 66.5], [82.5, 66.5], [82.5, 62.5], [79.5, 62.5], [79.5, 65], [76.5, 65], [76.5, 60.5], [74, 60.5]], 0.8), ""),
+  },
+  {
+    id: "S5", name: "Window bit, shorter",
+    idea: "S2 on a shorter shaft that ends at 80.",
+    works: "Gives the keycap more room in the icon, and the bit is closer to the collars, which looks sturdier.",
+    watch: "Less of the long, elegant skeleton-key proportion.",
+    ...skel(80, COLLARS, bit(68, 80, 66), windowWard(68)),
+  },
+  {
+    id: "S6", name: "Castle bit, shorter",
+    idea: "S1 on a shorter shaft that ends at 80.",
+    works: "Compact and balanced against the keycap.",
+    watch: "The collars and bit crowd the shaft a little.",
+    ...skel(80, COLLARS, bit(68, 80, 66), castle(68)),
+  },
+  {
+    id: "T3", name: "Previous: two teeth",
+    idea: "The two-teeth blade from before, for comparison.",
+    works: "Shows what changed.",
+    watch: "Too plain next to the keycap.",
+    ...T(80, 7, 4, 65, 63.5),
+  },
+];
+/* The keycap alone as the logo, with a picture on its face. Face drawings are in millimetres on the face seen
+   from above (u across from the center, v back to front, 14 deep) and mapped onto the drawn face in perspective. */
+const L_T = 'transform="translate(25.6 30.8) scale(0.068) translate(0 -610)"';
+/* The larger face: 433 units deep at its center line and about 600 across, for a 12.5 by 14 mm face. */
+const L_FACE = "M160 610Q419 654 678 610Q712 612 716 645L735 995Q733 1035 690 1038Q419 1092 148 1038Q102 1032 102 995L118 650Q122 612 160 610Z";
+const FACE_MM = 'transform="translate(418 632) scale(46 30.9)"';
+const onFace = (s) => `<g ${L_T}><g ${FACE_MM}>${s}</g></g>`;
+const kD = (x, y, h) => {
+  const s = h / 200;
+  return `M${f(x)} ${f(y)}V${f(y + h)}M${f(x + 104 * s)} ${f(y + 72 * s)}L${f(x)} ${f(y + 160 * s)}M${f(x + 46 * s)} ${f(y + 122 * s)}L${f(x + 108 * s)} ${f(y + h)}`;
+};
+const kStroke = (d, w, color) => `<path d="${d}" fill="none" stroke="${color}" stroke-width="${w}" stroke-linejoin="miter"/>`;
+/* A cylinder key along +x with its bow centered on the origin. */
+const CYL = `<path fill-rule="evenodd" d="${circ(0, 0, 1.8)}${circ(0, 0, 0.75)}"/>` +
+  `<path d="M1.5 -1.1H2.05V1.1H1.5ZM1.7 -0.6H6.4L7 0L6.6 0.5H6.2L5.85 1.05L5.5 0.55L5.15 1.05L4.8 0.55L4.45 1.05L4.1 0.55L3.75 1.05L3.4 0.55H1.7Z"/>`;
+/* A pin-tumbler key: flat spine, bevelled tip, and cuts of uneven depth with flat lands between them; optionally the
+   groove milled along the blade. */
+const CYL_BLADE = "M1.7 -0.6H6.3L7 -0.05V0.3L6.75 0.62L6.5 0.95L6.3 0.95L6.05 0.55L5.9 0.55L5.65 0.95L5.45 0.95L5.25 0.75L5.1 0.75L4.85 1.0L4.65 1.0L4.4 0.6L4.25 0.6L4.0 0.85L3.8 0.85L3.55 0.65L3.4 0.65L3.15 1.0L1.7 1.0Z";
+const cylKey = (groove) => `<path fill-rule="evenodd" d="${circ(0, 0, 1.8)}${circ(0, 0, 0.75)}"/>` +
+  `<path d="M1.5 -1.1H2.05V1.1H1.5Z"/><path fill-rule="evenodd" d="${CYL_BLADE}${groove ? "M2.4 0.02H6.1V0.2H2.4Z" : ""}"/>`;
+const ring = (cx, cy, r, w) => `<path d="${circ(cx, cy, r)}" fill="none" stroke="currentColor" stroke-width="${w}"/>`;
+const capOnly = (extra) => ({
+  fill: `<g ${L_T}><path d="${Q_SIL}"/></g>`,
+  cut: `<g ${L_T}><path d="${L_FACE}"/></g>`,
+  ...extra,
+});
+const K_CORNER = kD(-4.9, 1.5, 6.2);
+const L_MARKS = [
+  {
+    id: "L1", name: "Key under the legend",
+    idea: "A cylinder key lies across the front of the face. The k sits in the back-left corner like a real legend, its leg crossing over the key's bow with a thin gap around it.",
+    works: "Keyboard, key and the name's initial in one keycap. The overlap makes the k and the key one picture instead of two stickers.",
+    watch: "The key's teeth are tiny below 48 px. At small sizes it reads as a keycap with a k and a bar.",
+    ...capOnly({
+      top: onFace(`<g transform="translate(-2.9 9.6) scale(1.22)">${CYL}</g>`),
+      topCut: onFace(kStroke(K_CORNER, 1.9, "#000")),
+      top2: onFace(kStroke(K_CORNER, 0.95, "currentColor")),
+    }),
+  },
+  {
+    id: "L2", name: "Diagonal key",
+    idea: "L1 with the key turned to run diagonally up the face, bow at the front left under the k.",
+    works: "More movement, and the longer diagonal gives the key's teeth more room.",
+    watch: "A diagonal key can read as a \"no entry\" slash at a glance.",
+    ...capOnly({
+      top: onFace(`<g transform="translate(-2.4 9.6) rotate(-28) scale(1.15)">${CYL}</g>`),
+      topCut: onFace(kStroke(K_CORNER, 1.9, "#000")),
+      top2: onFace(kStroke(K_CORNER, 0.95, "currentColor")),
+    }),
+  },
+  {
+    id: "L3", name: "Keychain with a k tag",
+    idea: "A key ring at the back of the face, with a cylinder key and a tag hanging from it. The k is cut out of the tag.",
+    works: "Tells the keyring part of the name, and the tag is a natural place for the initial.",
+    watch: "The most detail of the four. Below 48 px it becomes a ring and two blobs.",
+    ...capOnly({
+      top: onFace(ring(0, 3.3, 1.9, 0.55) +
+        `<g transform="translate(-0.9 5.4) rotate(112)">${CYL}</g>` +
+        `<g transform="translate(1.1 5.0) rotate(-20)"><path fill-rule="evenodd" d="${rr(-1.9, 0.5, 3.8, 6, 0.8)}${circ(0, 1.4, 0.45)}"/></g>`),
+      topCut: onFace(`<g transform="translate(1.1 5.0) rotate(-20)">${kStroke(kD(-0.95, 2.4, 3.4), 0.65, "#000")}</g>`),
+    }),
+  },
+  {
+    id: "L4", name: "Keychain with a k charm",
+    idea: "The same ring and key, with the letter k itself hanging as the second charm from a small loop on its stem.",
+    works: "Less detail than the tag, and the k is bigger and easier to read.",
+    watch: "A letter hanging from a ring is less obvious than a tag; it may just read as a k next to a key.",
+    ...capOnly({
+      top: onFace(ring(0, 3.3, 1.9, 0.55) +
+        `<g transform="translate(-0.9 5.4) rotate(112)">${CYL}</g>` +
+        ring(1.5, 5.6, 0.45, 0.35) + kStroke(kD(1.5, 6.05, 5.2), 0.85, "currentColor")),
+    }),
+  },
+  {
+    id: "S2", name: "Previous: window bit",
+    idea: "The keycap key with a skeleton blade, for comparison.",
+    works: "Shows the other direction.",
+    watch: "The blade makes the mark wide, so the keycap is small in the icon.",
+    ...skel(86, COLLARS, bit(74, 86, 66), windowWard(74)),
+  },
+];
+/* A key ring with two charms: the keycap, hung by an eyelet on its top, and a cylinder key.
+   The ring passes in front of one side of the eyelet and behind the other. At the key it crosses in front of the
+   bow as a solid band cut out of the key, then goes behind it, running right up to the key's edge both times. */
+const RING_C = [44, 30], RING_R = 9, RING_W = 3;
+const onRing = (deg) => [RING_C[0] + RING_R * Math.cos(deg * Math.PI / 180), RING_C[1] + RING_R * Math.sin(deg * Math.PI / 180)];
+const arc = (a0, a1) => {
+  const [x0, y0] = onRing(a0), [x1, y1] = onRing(a1);
+  return `M${f(x0)} ${f(y0)}A${RING_R} ${RING_R} 0 0 1 ${f(x1)} ${f(y1)}`;
+};
+const ringStroke = (d, w, color) => `<path d="${d}" fill="none" stroke="${color}" stroke-width="${w}" stroke-linecap="butt"/>`;
+const EYELET_GAP = 0.7;
+const KEY_BAND = arc(80, 120);
+/* weave: "mixed" gaps the eyelet and inverts the key; "gap" separates both crossings with gaps; "invert" draws
+   both with no gaps, the part behind showing as a dark line where it passes under. */
+/* eyelet: { squash, tilt } draws the eyelet as an ellipse, its width across the ring scaled by squash and its axes
+   turned by tilt degrees, as if the loop were turned partly on edge. */
+/* kPathMm: the k's path in face millimetres, or markup (starting with "<") drawn on the face instead. */
+function chain(kPathMm, ringInHole = true, weave = "mixed", { squash = 1, tilt = 0, cyl = CYL, capScale = 1 } = {}) {
+  const [ex, ey] = onRing(45), [bx, by] = onRing(130);
+  const keyAt = (s) => `<g transform="translate(${f(bx)} ${f(by)}) rotate(118) scale(3.6)">${s}</g>`;
+  const key = keyAt(cyl);
+  /* Drawn a hair larger than the cut it covers, so no anti-aliased seam shows where the ring meets it. */
+  const keyTop = keyAt(`<g stroke="currentColor" stroke-width="0.12" stroke-linejoin="round">${cyl}</g>`);
+  const bowDisk = keyAt(`<path d="${circ(0, 0, 1.8)}"/>`);
+  const cap = `<g transform="translate(${f(ex)} ${f(ey)}) rotate(-30) scale(${f(0.038 * capScale)}) translate(-418 -500)">` +
+    `<path fill-rule="evenodd" d="${Q_SIL}${L_FACE}"/>` +
+    `<g ${FACE_MM}>${kPathMm.startsWith("<") ? kPathMm : kStroke(kPathMm, 0.95, "currentColor")}</g></g>`;
+  /* The eyelet, split across the ring's direction: the half toward the key passes in front of the ring, the other
+     half behind it. Each gap follows the shape in front, so no gap ends where the two cross. */
+  const r = 2.66, w = 0.84, u = Math.SQRT1_2;
+  const phi = 45 + tilt, rb = r * squash, t = (45 - phi) * Math.PI / 180;
+  const rho = 1 / Math.hypot(Math.cos(t) / r, Math.sin(t) / rb);
+  const p1 = `${f(ex + rho * u)} ${f(ey + rho * u)}`, p2 = `${f(ex - rho * u)} ${f(ey - rho * u)}`;
+  const ea = `A${f(r)} ${f(rb)} ${phi} 0 1`;
+  const eyeFront = `M${p1}${ea} ${p2}`, eyeBack = `M${p2}${ea} ${p1}`;
+  const fullRing = `M${RING_C[0] - RING_R} ${RING_C[1]}a${RING_R} ${RING_R} 0 1 0 ${2 * RING_R} 0a${RING_R} ${RING_R} 0 1 0 ${-2 * RING_R} 0`;
+  const wrap = (s) => `<g transform="translate(1 8)">${s}</g>`;
+  const capHalo = `<g stroke="#000" stroke-width="2.4" stroke-linejoin="round">${cap.replaceAll("currentColor", "#000")}</g>`;
+  const eyeFrontTop = `<path d="${eyeFront}" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round"/>`;
+  if (weave === "gap") {
+    /* In front of the bow the ring stays white across the bow and on into the hole; it goes behind at the hole's far
+       edge, where the gap around the hole stops it. */
+    const band = arc(72, 130);
+    const keyHalo = keyAt(`<g stroke="#000" stroke-width="${f(2 * EYELET_GAP / 3.6)}" stroke-linejoin="round">${cyl}</g>`);
+    return {
+      fill: wrap(ringStroke(fullRing, RING_W, "currentColor")),
+      cut: wrap(capHalo + ringStroke(eyeFront, w + 2 * EYELET_GAP, "#000") + keyHalo),
+      top: wrap(key + cap),
+      topCut: wrap(ringStroke(band, RING_W + 2 * EYELET_GAP, "#000")),
+      layers: [{ content: wrap(ringStroke(eyeBack, w, "currentColor")), cut: wrap(ringStroke(fullRing, RING_W + 2 * EYELET_GAP, "#000")) }],
+      top2: wrap(ringStroke(band, RING_W, "currentColor") + eyeFrontTop),
+    };
+  }
+  if (weave === "invert") {
+    return {
+      fill: wrap(ringStroke(fullRing, RING_W, "currentColor")),
+      cut: wrap(capHalo + ringStroke(eyeFront, w + 2 * EYELET_GAP, "#000") + ringStroke(eyeBack, w, "#000") + key + (ringInHole ? "" : bowDisk)),
+      top: wrap(keyTop + cap),
+      topCut: wrap(ringStroke(KEY_BAND, RING_W, "#000")),
+      layers: [{ content: wrap(ringStroke(eyeBack, w, "currentColor")), cut: wrap(ringStroke(fullRing, RING_W, "#000")) }],
+      top2: wrap(eyeFrontTop),
+    };
+  }
+  return {
+    fill: wrap(ringStroke(fullRing, RING_W, "currentColor")),
+    cut: wrap(`<g stroke="#000" stroke-width="2.4" stroke-linejoin="round">${cap.replaceAll("currentColor", "#000")}</g>` +
+      ringStroke(eyeFront, w + 2 * EYELET_GAP, "#000") + key + (ringInHole ? "" : bowDisk)),
+    top: wrap(keyTop + cap),
+    topCut: wrap(ringStroke(KEY_BAND, RING_W, "#000")),
+    layers: [{ content: wrap(ringStroke(eyeBack, w, "currentColor")), cut: wrap(ringStroke(fullRing, RING_W + 2 * EYELET_GAP, "#000")) }],
+    top2: wrap(`<path d="${eyeFront}" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round"/>`),
+  };
+}
+const CHAIN_MARKS = [
+  {
+    id: "H1", name: "Keycap charm, centered k",
+    idea: "The keycap hangs from a key ring by an eyelet on its top, next to a cylinder key. The k sits in the middle of the face, toward the back.",
+    works: "Reads as a keychain at once, and the keycap says \"keyboard\" as the charm. The name's two halves, key and ring, both appear.",
+    watch: "Three objects in a small icon. The k is the first detail to go below 48 px.",
+    ...chain(kD(-2.6, 2.0, 9.6)),
+  },
+  {
+    id: "H1b", name: "No ring in the bow's hole",
+    idea: "H1 with the ring hidden where it would show through the key's hole.",
+    works: "One less small piece of ring, so the bow reads as a cleaner shape at small sizes.",
+    watch: "The ring looks like it stops at the key rather than passing through it.",
+    ...chain(kD(-2.6, 2.0, 9.6), false),
+  },
+  {
+    id: "H1c", name: "Gaps at both crossings",
+    idea: "H1b with the key woven like the eyelet: the ring stays white across the bow and into the hole, with a thin gap on each side, and stops with a gap at the hole's far edge, where it goes behind.",
+    works: "One rule for every crossing, and the ring reads as one continuous loop through the key.",
+    watch: "More thin gaps across the bow, which close up first at small sizes.",
+    ...chain(kD(-2.6, 2.0, 9.6), false, "gap"),
+  },
+  {
+    id: "H1e", name: "Gaps, eyelet turned",
+    idea: "H1c with the eyelet a slight ellipse, as if the small ring were turned a little and partly on edge.",
+    works: "The eyelet looks like a ring in space rather than a flat circle, which helps the weave read.",
+    watch: "At small sizes the ellipse is indistinguishable from a circle, so the effect is for larger renders.",
+    ...chain(kD(-2.6, 2.0, 9.6), false, "gap", { squash: 0.8, tilt: 15 }),
+  },
+  {
+    id: "H1f", name: "H1e with a real key's cuts",
+    idea: "H1e with the blade cut like a pin-tumbler key: a flat spine, a bevelled tip, and cuts of uneven depth with flat lands between them.",
+    works: "Reads as a house key rather than a saw.",
+    watch: "The uneven cuts are fine detail; below 48 px they blur into a rough edge.",
+    ...chain(kD(-2.6, 2.0, 9.6), false, "gap", { squash: 0.8, tilt: 15, cyl: cylKey(false) }),
+  },
+  {
+    id: "H1g", name: "Cuts and a groove",
+    idea: "H1f with the groove milled along the blade.",
+    works: "The groove is the detail that most says \"cylinder key\".",
+    watch: "The groove is a thin line and disappears in small icons.",
+    ...chain(kD(-2.6, 2.0, 9.6), false, "gap", { squash: 0.8, tilt: 15, cyl: cylKey(true) }),
+  },
+  {
+    id: "H1d", name: "Inverted where the ring passes over",
+    idea: "H1b with the eyelet woven like the key: where the ring passes over the eyelet, the eyelet shows as a dark line through the ring instead of stopping short of it.",
+    works: "The ring passing over reads the same way at the eyelet and at the key, and the eyelet stays a whole loop.",
+    watch: "The dark line through the ring is thin and fades first at small sizes.",
+    ...chain(kD(-2.6, 2.0, 9.6), false, "invert"),
+  },
+  {
+    id: "H2", name: "Keycap charm, corner k",
+    idea: "H1 with the k in the back-left corner, where a real keycap puts its legend.",
+    works: "More like a real keycap, and the k sits clear of the eyelet.",
+    watch: "The off-center k makes the keycap less symmetrical as a charm.",
+    ...chain(kD(-5.2, 1.4, 8.8)),
+  },
+];
+/* The plugin's icon: the Android robot's head over the mark, the way KeePass2Android plugins show what they plug
+   into. The robot is reproduced or modified from work created and shared by Google and used according to terms
+   described in the Creative Commons 3.0 Attribution License. */
+function droidHead(cx, cy, R, filled) {
+  const ant = [60, 120].map(a => {
+    const c = Math.cos(a * Math.PI / 180), sn = Math.sin(a * Math.PI / 180);
+    return `M${f(cx + R * 0.86 * c)} ${f(cy - R * 0.86 * sn)}L${f(cx + R * 1.32 * c)} ${f(cy - R * 1.32 * sn)}`;
+  }).join("");
+  const eyes = [-1, 1].map(k => circ(f(cx + k * R * 0.45), f(cy - R * 0.42), f(R * 0.12))).join("");
+  const sw = f(R * 0.2);
+  const dome = `M${f(cx - R)} ${f(cy)}A${R} ${R} 0 0 1 ${f(cx + R)} ${f(cy)}`;
+  return `<path d="${ant}" fill="none" stroke="currentColor" stroke-width="${f(sw * 0.8)}" stroke-linecap="round"/>` +
+    (filled ? `<path fill-rule="evenodd" d="${dome}Z${eyes}"/>`
+      : `<path d="${dome}" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round"/><path d="${eyes}"/>`);
+}
+/* On the keycap's face, in face millimetres, so the head takes the face's perspective like the k. */
+const faceHead = (x, base, R, filled) => droidHead(x, base, R, filled);
+const kSide = kStroke(kD(-5.5, 3.8, 6.8), 0.85, "currentColor");
+const H1G_OPTS = { squash: 0.8, tilt: 15, cyl: cylKey(true) };
+const H1E_ARGS = [false, "gap", H1G_OPTS];
+/* Scales a mark by s about the grid's center and moves that center to (cx, cy). */
+function place(m, s, cx, cy) {
+  const g = (x) => x && `<g transform="translate(${f(cx - 54 * s)} ${f(cy - 54 * s)}) scale(${s})">${x}</g>`;
+  return { fill: g(m.fill), cut: g(m.cut), top: g(m.top), topCut: g(m.topCut),
+    layers: (m.layers || []).map(l => ({ content: g(l.content), cut: g(l.cut) })), top2: g(m.top2) };
+}
+/* The keycap on its own, upright, with the head as its legend; with eyelet, the small loop it hangs from. */
+function capAlone(eyelet) {
+  const face = `<path fill-rule="evenodd" d="${Q_SIL}${L_FACE}"/><g ${FACE_MM}>${faceHead(0, 11.2, 5.6, true)}</g>`;
+  const loop = eyelet ? `<path d="${circ(418, 525, 62)}" fill="none" stroke="currentColor" stroke-width="22"/>` : "";
+  const [cy, sc] = eyelet ? [893, 0.054] : [952, 0.057];
+  return { fill: `<g transform="translate(54 54) scale(${sc}) translate(-418 -${cy})">${loop}${face}</g>` };
+}
+const PLUGIN_MARKS = [
+  {
+    id: "P1", name: "Plugin: filled head on the keycap",
+    idea: "H1e with the Android robot's head on the keycap's face in place of the k, in the face's perspective.",
+    works: "The mark keeps its full size and stays the same shape as the hub's icon; only the legend changes.",
+    watch: "Without the k, the Keyling name is carried by the keychain alone.",
+    ...chain(faceHead(0, 11.2, 5.6, true), ...H1E_ARGS),
+  },
+  {
+    id: "P2", name: "Plugin: outline head on the keycap",
+    idea: "The same with the head as an outline, like InputStick's plugin icon.",
+    works: "Matches the k's line weight, so it looks like a legend printed on the key.",
+    watch: "The eyes and antennae are small and go first at small sizes.",
+    ...chain(faceHead(0, 11.4, 5.6, false), ...H1E_ARGS),
+  },
+  {
+    id: "P3", name: "Plugin: filled head with a k",
+    idea: "A smaller k on the left of the face and the filled head on the right.",
+    works: "Says both Keyling and KeePass2Android plugin on the one key.",
+    watch: "Two small legends on the face, so each is smaller.",
+    ...chain(kSide + faceHead(3.0, 10.6, 3.8, true), ...H1E_ARGS),
+  },
+  {
+    id: "P4", name: "Plugin: outline head with a k",
+    idea: "The same with the outline head.",
+    works: "Both legends in one line weight.",
+    watch: "The busiest of the four at small sizes.",
+    ...chain(kSide + faceHead(3.0, 10.8, 3.8, false), ...H1E_ARGS),
+  },
+  {
+    id: "P5", name: "Plugin: the keycap alone",
+    idea: "Only the keycap, upright and as large as the icon allows, with the robot's head as its legend.",
+    works: "From a distance it's a different shape from the hub's keychain, and the head is at its largest.",
+    watch: "Drops the key and ring, so the tie to the Keyling logo is the keycap alone.",
+    ...capAlone(false),
+  },
+  {
+    id: "P6", name: "Plugin: keycap with its eyelet",
+    idea: "P5 with the small loop the keycap hangs from, so it still reads as the charm off the keychain.",
+    works: "Keeps a hint of the keychain while staying a different silhouette.",
+    watch: "The keycap is a little smaller than in P5 to make room for the loop.",
+    ...capAlone(true),
+  },
+  {
+    id: "P7", name: "Plugin: big keycap on the chain",
+    idea: "P1 with the keycap enlarged against the ring and key.",
+    works: "Same parts as the hub's logo, but the keycap dominates.",
+    watch: "From a distance it's still a keychain, so it's the closest to the hub's icon of the three.",
+    ...place(chain(faceHead(0, 11.2, 5.6, true), false, "gap", { ...H1G_OPTS, capScale: 1.45 }), 0.74, 52, 49),
+  },
+];
+const FAMILIES = [
+  { name: "Keycap on a keychain", marks: CHAIN_MARKS.filter(m => ["H1e", "H1f", "H1g", "H1b", "H1c", "H1d"].includes(m.id)) },
+  { name: "KeePass2Android plugin", marks: PLUGIN_MARKS },
+  { name: "For comparison: the selected logo and Happy Ling", marks: [LOGO, EXPLORED[1].marks.find(m => m.id === "C2")] },
+];
+
+let uid = 0;
+function svg(m, { viewBox = "0 0 108 108", size, cls = "", bg, xmlns = false } = {}) {
+  const id = `mk${++uid}`;
+  const maskOf = (mid, content) => `<mask id="${mid}" maskUnits="userSpaceOnUse" x="0" y="0" width="108" height="108"><rect width="108" height="108" fill="#fff"/><g fill="#000">${content}</g></mask>`;
+  const layers = m.layers || [];
+  const defs = (m.cut || m.topCut || layers.length)
+    ? `<defs>${m.cut ? maskOf(id, m.cut) : ""}${m.topCut ? maskOf(id + "t", m.topCut) : ""}${layers.map((l, n) => maskOf(`${id}l${n}`, l.cut)).join("")}</defs>`
+    : "";
+  return `<svg ${xmlns ? 'xmlns="http://www.w3.org/2000/svg" style="color:#FFFFFF"' : ""} class="${cls}" viewBox="${viewBox}" ${size ? `width="${size}" height="${size}"` : ""} aria-hidden="true">${defs}` +
+    (bg ? `<rect x="0" y="0" width="108" height="108" fill="${bg}"/>` : "") +
+    `<g fill="currentColor"${m.cut ? ` mask="url(#${id})"` : ""}>${m.fill}</g>` +
+    (m.top ? `<g fill="currentColor"${m.topCut ? ` mask="url(#${id}t)"` : ""}>${m.top}</g>` : "") +
+    layers.map((l, n) => `<g fill="currentColor" mask="url(#${id}l${n})">${l.content}</g>`).join("") +
+    (m.top2 ? `<g fill="currentColor">${m.top2}</g>` : "") + `</svg>`;
+}
+
+const BIG = topCap(26, 26, 56);
+document.getElementById("anatomy").innerHTML = [
+  { m: { fill: `<path d="${BIG.outer}"/>`, cut: line(BIG.faceP, 4) }, t: "Logo · from above", d: "The footprint with the face inset. Both top and bottom edges bow downward with the dish, and the front wall is a little thicker than the back." },
+  { m: { fill: `<g ${CAP_T}><path d="${CAP_BODY}"/></g>`, cut: `<g ${CAP_T}><path d="${CAP_GAP}"/></g>`, top: `<g ${CAP_T}>${face()}</g>` }, t: "Ling · three-quarter", d: "A big face standing above chamfered walls and a skirt. The face's top edge dips and its bottom edge bows toward you." },
+  { m: cap(CAP_T, true), t: "Ling · slits", d: "Two slits from the face's corners split the walls from the skirt. They are what makes it read in three dimensions." },
+].map(a => `<figure>${svg(a.m, { viewBox: "16 16 76 76" })}<figcaption><b>${a.t}</b>${a.d}</figcaption></figure>`).join("");
+
+function sheet(m) {
+  const safe = "18 18 72 72";
+  return `<article class="sheet" id="sheet-${m.id}">
+    <div class="sheet-head"><span class="letter">${m.id}</span><h3>${m.name}</h3><p>${m.idea}</p></div>
+    <div class="renders">
+      <div class="render">${svg(m, { viewBox: safe, cls: "icon circle animate tile", bg: "var(--tile-bg)" })}<span class="label">Circle mask</span></div>
+      <div class="render">${svg(m, { viewBox: safe, cls: "icon squircle tile", bg: "var(--tile-bg)" })}<span class="label">Squircle mask</span></div>
+      <div class="render">${svg(m, { viewBox: safe, cls: "icon themed", bg: "#DCE2FF" })}<span class="label">Themed icon</span></div>
+    </div>
+    <div class="row2">
+      <div class="sizes">
+        <div class="sizes-row on-light">${[48, 24, 16].map(s => svg(m, { viewBox: "20 20 68 68", size: s })).join("")}<span class="label">48 · 24 · 16</span></div>
+        <div class="sizes-row on-dark">${[48, 24, 16].map(s => svg(m, { viewBox: "20 20 68 68", size: s })).join("")}<span class="label">notification</span></div>
+      </div>
+      <div class="bezel"><canvas width="160" height="80" data-mark="${m.id}" aria-label="${m.name} on the dongle's 160 by 80 screen"></canvas><span class="label">Dongle screen · 160×80 actual pixels</span></div>
+    </div>
+    <div class="lockup">${svg(m, { viewBox: "20 20 68 68" })}<span class="word">key<span class="light">ling</span></span></div>
+    <div class="verdict"><div><span class="label">Works</span><span>${m.works}</span></div><div><span class="label">Watch</span><span>${m.watch}</span></div></div>
+  </article>`;
+}
+
+const ALL = FAMILIES.flatMap(fam => fam.marks);
+document.getElementById("families").innerHTML = FAMILIES.map(fam =>
+  `<div class="family"><span class="label">${fam.name}</span><div class="grid">${fam.marks.map(sheet).join("")}</div></div>`).join("");
+
+const families = document.getElementById("families");
+function paintTile() {
+  families.style.setProperty("--tile-bg", tile.bg);
+  families.style.setProperty("--tile-fg", tile.fg);
+  families.querySelectorAll(".tile").forEach(el => el.style.color = tile.fg);
+}
+let tile = TILES[0];
+const tilesEl = document.getElementById("tiles");
+tilesEl.innerHTML = TILES.map(t =>
+  `<button type="button" id="tile-${t.id}" data-tile="${t.id}" aria-pressed="${t === tile}"><span class="swatch" style="background:${t.bg}"><i style="background:${t.fg}"></i></span>${t.name}</button>`).join("");
+tilesEl.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  tile = TILES.find(t => t.id === b.dataset.tile);
+  tilesEl.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  paintTile();
+});
+paintTile();
+
+/* The dongle's screen: draw each mark at the real 160×80 resolution, then scale up without smoothing. */
+function loadImg(src) {
+  return new Promise((ok, fail) => { const i = new Image(); i.onload = () => ok(i); i.onerror = fail; i.src = src; });
+}
+async function paintScreens() {
+  try { await Promise.all([document.fonts.load("700 22px Montserrat"), document.fonts.load("400 22px Montserrat")]); } catch (_) {}
+  for (const c of document.querySelectorAll("canvas[data-mark]")) {
+    const m = ALL.find(x => x.id === c.dataset.mark);
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = "#15172B"; ctx.fillRect(0, 0, 160, 80);
+    const src = svg(m, { viewBox: "20 20 68 68", size: 68, xmlns: true });
+    try {
+      const img = await loadImg("data:image/svg+xml;charset=utf-8," + encodeURIComponent(src));
+      ctx.drawImage(img, 6, 20, 40, 40);
+    } catch (_) {}
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font = "700 22px Montserrat, sans-serif";
+    ctx.textBaseline = "middle";
+    ctx.fillText("key", 50, 39);
+    const kw = ctx.measureText("key").width;
+    ctx.font = "400 22px Montserrat, sans-serif";
+    ctx.fillText("ling", 50 + kw, 39);
+    ctx.fillStyle = "#8A8FB8";
+    ctx.font = "500 9px Montserrat, sans-serif";
+    ctx.fillText("waiting for phone", 51, 60);
+    ctx.fillStyle = "#4D9BFF";
+    ctx.fillRect(150, 6, 4, 4);
+  }
+}
+paintScreens();
+</script>
