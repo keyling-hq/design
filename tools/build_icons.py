@@ -19,7 +19,9 @@ sys.path.insert(0, HERE)
 from flatten import flatten  # noqa: E402
 
 LOGO = os.path.join(os.path.dirname(HERE), "logo")
-NAVY, WHITE, PERIWINKLE, GREY = "#15172B", "#FFFFFF", "#7C9CFF", "#757575"
+NAVY, WHITE, GREY = "#15172B", "#FFFFFF", "#757575"
+# The plugin's tile: the olive green of the older Keepass2Android icon, light at the top.
+OLIVE_TOP, OLIVE_BOTTOM = "#97AD48", "#5E7B1A"
 MARKS = {"H1g": "keyling-logo", "C2": "ling-happy", "P5": "kp2a-plugin"}
 
 
@@ -54,10 +56,17 @@ def d(g, sep=" "):
     return "".join(out)
 
 
-def svg(g, size, color, bg=None):
-    rect = f'<rect width="{size}" height="{size}" fill="{bg}"/>' if bg else ""
+def svg(g, size, color, bg=None, gradient=None):
+    """gradient: (top, bottom) colors for a vertical background gradient, in place of bg."""
+    defs, rect = "", ""
+    if gradient:
+        defs = (f'<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{gradient[0]}"/>'
+                f'<stop offset="1" stop-color="{gradient[1]}"/></linearGradient></defs>')
+        rect = f'<rect width="{size}" height="{size}" fill="url(#bg)"/>'
+    elif bg:
+        rect = f'<rect width="{size}" height="{size}" fill="{bg}"/>'
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {size} {size}" width="{size}" height="{size}">'
-            f'{rect}<path fill="{color}" fill-rule="evenodd" d="{d(g)}"/></svg>\n')
+            f'{defs}{rect}<path fill="{color}" fill-rule="evenodd" d="{d(g)}"/></svg>\n')
 
 
 def vector(g, size, dp, color):
@@ -74,9 +83,16 @@ def color_res(name, value):
             f'    <color name="{name}">{value}</color>\n</resources>\n')
 
 
+def gradient_res(top, bottom):
+    return (f'<?xml version="1.0" encoding="utf-8"?>\n'
+            f'<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">\n'
+            f'    <gradient android:angle="270" android:startColor="{top}" android:endColor="{bottom}" />\n'
+            f'</shape>\n')
+
+
 ADAPTIVE = """<?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background android:drawable="@color/ic_launcher_background" />
+    <background android:drawable="@drawable/ic_launcher_background" />
     <foreground android:drawable="@drawable/ic_launcher_foreground" />
     <monochrome android:drawable="@drawable/ic_launcher_foreground" />
 </adaptive-icon>
@@ -114,7 +130,7 @@ def main():
         write(os.path.join(folder, "kp2a-plugin.svg"), svg(plugin_big, 512, NAVY))
         write(os.path.join(folder, "kp2a-plugin-white.svg"), svg(plugin_big, 512, WHITE))
         write(os.path.join(folder, "kp2a-plugin-icon.svg"),
-              svg(fit_circle(plugin, 256, 256, 200), 512, NAVY, PERIWINKLE))
+              svg(fit_circle(plugin, 256, 256, 200), 512, WHITE, gradient=(OLIVE_TOP, OLIVE_BOTTOM)))
 
     # Adaptive launcher icons are 108 dp with a 66 dp safe circle.
     if args.hub:
@@ -128,9 +144,8 @@ def main():
     if args.plugin:
         # The keycap's rounded corners stay inside the mask, so the plugin's mark can use the whole safe circle.
         write(os.path.join(args.plugin, "drawable", "ic_launcher_foreground.xml"),
-              vector(fit_circle(plugin, 54, 54, 33), 108, 108, NAVY))
-        write(os.path.join(args.plugin, "values", "ic_launcher_background.xml"),
-              color_res("ic_launcher_background", PERIWINKLE))
+              vector(fit_circle(plugin, 54, 54, 33), 108, 108, WHITE))
+        write(os.path.join(args.plugin, "drawable", "ic_launcher_background.xml"), gradient_res(OLIVE_TOP, OLIVE_BOTTOM))
         write(os.path.join(args.plugin, "mipmap-anydpi", "ic_launcher.xml"), ADAPTIVE)
         # Shown by KeePass2Android next to the plugin's entry actions, in the grey of Material's action icons.
         write(os.path.join(args.plugin, "drawable", "ic_keyling.xml"), vector(fit_box(logo, 24, 1), 24, 24, GREY))

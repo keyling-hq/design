@@ -34,7 +34,7 @@ generated from it.
   cylinder key. One filled path each, no masks or strokes, 512 px.
 - `ling-happy.svg` / `-white.svg`: Ling, the keycap as a character (mark C2).
 - `kp2a-plugin.svg` / `-white.svg`, `kp2a-plugin-icon.svg`: the KeePass2Android plugin's mark (P5)
-  and its icon on the periwinkle tile.
+  and its icon on the olive green tile.
 - `github-avatar.svg` / `.png`: the organization's avatar, white on navy.
 
 The main tile is navy `#15172B` with a white mark.
@@ -70,6 +70,6 @@ generated: render them from the SVGs at the size needed.
 MIT, see `LICENSE`. The fonts named in the tokens are not part of this repository and keep their
 own licenses (SIL Open Font License 1.1).
 
-`logo/kp2a-plugin*.svg` carries the Android robot's head. The Android robot is reproduced or
-modified from work created and shared by Google and used according to terms described in the
-[Creative Commons 3.0 Attribution License](https://creativecommons.org/licenses/by/3.0/).
+`logo/kp2a-plugin*.svg`: the robot head follows Keepass2Android's icon, by Philipp Crocoll. The
+Android robot is reproduced or modified from work created and shared by Google and used according
+to terms described in the [Creative Commons 3.0 Attribution License](https://creativecommons.org/licenses/by/3.0/).

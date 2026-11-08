@@ -736,16 +736,28 @@ const CHAIN_MARKS = [
    into. The robot is reproduced or modified from work created and shared by Google and used according to terms
    described in the Creative Commons 3.0 Attribution License. */
 function droidHead(cx, cy, R, filled) {
+  /* On the outline head the antennae are thin and start on the ring's center line, so their round ends stay inside
+     the ring. */
+  const [a0, a1, aw] = filled ? [0.86, 1.32, R * 0.16] : [1.0, 1.5, R * 0.08];
   const ant = [60, 120].map(a => {
     const c = Math.cos(a * Math.PI / 180), sn = Math.sin(a * Math.PI / 180);
-    return `M${f(cx + R * 0.86 * c)} ${f(cy - R * 0.86 * sn)}L${f(cx + R * 1.32 * c)} ${f(cy - R * 1.32 * sn)}`;
+    return `M${f(cx + R * a0 * c)} ${f(cy - R * a0 * sn)}L${f(cx + R * a1 * c)} ${f(cy - R * a1 * sn)}`;
   }).join("");
-  const eyes = [-1, 1].map(k => circ(f(cx + k * R * 0.45), f(cy - R * 0.42), f(R * 0.12))).join("");
+  const eyes = [-1, 1].map(k => circ(f(cx + k * R * 0.45), f(cy - R * 0.42), f(R * (filled ? 0.12 : 0.14)))).join("");
   const sw = f(R * 0.2);
   const dome = `M${f(cx - R)} ${f(cy)}A${R} ${R} 0 0 1 ${f(cx + R)} ${f(cy)}`;
-  return `<path d="${ant}" fill="none" stroke="currentColor" stroke-width="${f(sw * 0.8)}" stroke-linecap="round"/>` +
+  return `<path d="${ant}" fill="none" stroke="currentColor" stroke-width="${f(aw)}" stroke-linecap="round"/>` +
     (filled ? `<path fill-rule="evenodd" d="${dome}Z${eyes}"/>`
       : `<path d="${dome}" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round"/><path d="${eyes}"/>`);
+}
+/* The Android robot's outline head, as Keepass2Android's launcher icon draws it (graphics/launcher_icon/Logo-green-foreground.svg):
+   its eyes and its dome with antennae, in that file's 800-unit square. */
+const KP2A_HEAD = "M 318.7,232 C 332.3,232 343.3,242.9 343.3,256.4 C 343.3,269.9 332.3,280.8 318.7,280.8 C 305.1,280.8 294.1,269.9 294.1,256.4 C 294.1,242.9 305.1,232 318.7,232 ZM 453.5,256.4 C 453.5,269.9 464.5,280.8 478.1,280.8 C 491.7,280.8 502.7,269.9 502.7,256.4 C 502.7,242.9 491.7,232 478.1,232 C 464.5,232 453.5,242.9 453.5,256.4 ZM 507.5,158.5 L 507.7,158.2 L 543.3,106.9 C 545.7,103.4 545.1,98.8 541.9,96.6 C 538.7,94.4 534.2,95.5 531.7,99 L 494.5,152.5 L 494.4,152.8 C 465.1,141 432.3,134.3 397.6,134.3 C 362.4,134.3 329.1,141.2 299.5,153.3 L 261.8,99 C 259.4,95.5 254.8,94.4 251.6,96.6 C 248.4,98.8 247.8,103.4 250.2,106.9 L 286.4,159.1 C 219.6,191.3 174.5,251.5 174.5,320.4 L 217.4,320.4 C 217.4,241.3 298.2,176.9 397.5,176.9 C 496.8,176.9 577.6,241.2 577.6,320.4 L 620.5,320.4 C 620.7,251.1 575.1,190.6 507.5,158.5 Z";
+const KP2A_HEAD_BOX = [174.5, 95.5, 620.5, 320.4];
+/* The head on the keycap's face, centered on x, its base at base, width mm wide (face millimetres). */
+function faceKp2aHead(x, base, width) {
+  const [hx0, , hx1, hy1] = KP2A_HEAD_BOX, s = width / (hx1 - hx0);
+  return `<g transform="translate(${x} ${base}) scale(${s.toFixed(5)}) translate(${f(-(hx0 + hx1) / 2)} ${-hy1})"><path fill-rule="evenodd" d="${KP2A_HEAD}"/></g>`;
 }
 /* On the keycap's face, in face millimetres, so the head takes the face's perspective like the k. */
 const faceHead = (x, base, R, filled) => droidHead(x, base, R, filled);
@@ -760,7 +772,7 @@ function place(m, s, cx, cy) {
 }
 /* The keycap on its own, upright, with the head as its legend; with eyelet, the small loop it hangs from. */
 function capAlone(eyelet) {
-  const face = `<path fill-rule="evenodd" d="${Q_SIL}${L_FACE}"/><g ${FACE_MM}>${faceHead(0, 11.2, 5.6, true)}</g>`;
+  const face = `<path fill-rule="evenodd" d="${Q_SIL}${L_FACE}"/><g ${FACE_MM}>${faceKp2aHead(0, 10.1, 10.9)}</g>`;
   const loop = eyelet ? `<path d="${circ(418, 525, 62)}" fill="none" stroke="currentColor" stroke-width="22"/>` : "";
   const [cy, sc] = eyelet ? [893, 0.054] : [952, 0.057];
   return { fill: `<g transform="translate(54 54) scale(${sc}) translate(-418 -${cy})">${loop}${face}</g>` };
