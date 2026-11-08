@@ -7,8 +7,6 @@
     "connected": { "$value": "#00FF00", "$description": "Short glow when the phone connects" },
     "error": { "$value": "#FF0000", "$description": "Three blinks" },
     "security-key": { "$value": "#FF00FF", "$description": "Double blink: a security key request waits for a touch" },
-    "eject-start": { "$value": "#00E0C0", "$description": "Drive ejected: a sweep from this…" },
-    "eject-middle": { "$value": "#0040FF", "$description": "…through this…" },
-    "eject-end": { "$value": "#A000FF", "$description": "…to this, fading out, twice" }
+    "drive": { "$value": "#00E0C0", "$description": "Faint slow pulse while a computer has the dongle's drive: don't unplug" }
   }
 }
