@@ -122,6 +122,9 @@ def main():
               vector(fit_circle(logo, 54, 54, 31), 108, 108, WHITE))
         write(os.path.join(args.hub, "values", "ic_launcher_background.xml"), color_res("ic_launcher_background", NAVY))
         write(os.path.join(args.hub, "drawable", "ic_notification.xml"), vector(fit_box(logo, 24, 1), 24, 24, WHITE))
+        # Drawn in the app's own screens and tinted there, so the mark fills its box with no margin.
+        write(os.path.join(args.hub, "drawable", "keyling_logo.xml"), vector(fit_box(logo, 512, 0), 512, 128, WHITE))
+        write(os.path.join(args.hub, "drawable", "ling_happy.xml"), vector(fit_box(ling, 512, 0), 512, 128, WHITE))
     if args.plugin:
         # The keycap's rounded corners stay inside the mask, so the plugin's mark can use the whole safe circle.
         write(os.path.join(args.plugin, "drawable", "ic_launcher_foreground.xml"),
