@@ -7,20 +7,21 @@
     "text": { "$value": "#FFFFFF", "$description": "Main text and icons" },
     "text-dim": { "$value": "#8A8FB8", "$description": "Secondary text, labels" },
     "accent": { "$value": "#7C9CFF", "$description": "Focus and headers without an app color" },
-    "on-accent": { "$value": "#15172B", "$description": "Text and icons on accent, good, bad, warn and app colors" },
+    "on-accent": { "$value": "#15172B", "$description": "Text and icons on accent, good, bad and warn" },
+    "on-app": { "$value": "#15172B", "$description": "Text and icons on app colors" },
     "good": { "$value": "#7CF29A", "$description": "Approve, success, connected computer" },
     "bad": { "$value": "#FF6B6B", "$description": "Erase, errors, refusals" },
     "warn": { "$value": "#FFD166", "$description": "Warnings, locked profile" },
     "bluetooth-connected": { "$value": "#4D9BFF", "$description": "Bluetooth symbol while a phone is connected" },
-    "settings": { "$value": "#FFD166", "$description": "Settings, which is always there, has its own color" },
     "app": {
-      "$description": "Every other app takes these in launcher order (built-in apps first), starting over after the last",
-      "1": { "$value": "#FF6B6B" },
-      "2": { "$value": "#4ECDC4" },
-      "3": { "$value": "#5BC0EB" },
-      "4": { "$value": "#B28DFF" },
-      "5": { "$value": "#FF9F43" },
-      "6": { "$value": "#F78FB3" }
+      "$description": "Colors for apps, screens and other items that need telling apart; each project decides which item takes which",
+      "1": { "$value": "#FFD166" },
+      "2": { "$value": "#FF6B6B" },
+      "3": { "$value": "#4ECDC4" },
+      "4": { "$value": "#5BC0EB" },
+      "5": { "$value": "#B28DFF" },
+      "6": { "$value": "#FF9F43" },
+      "7": { "$value": "#F78FB3" }
     }
   },
   "radius": {

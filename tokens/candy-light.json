@@ -1,5 +1,5 @@
 {
-  "$description": "Candy for light backgrounds: the hub app in the phone's light mode. The same color names as candy.json; the dongle has no light theme, so the dongle-only tokens (app colors, radii) aren't here. Design Tokens Format (DTCG): colors are sRGB hex.",
+  "$description": "Candy for light backgrounds: the hub app in the phone's light mode. The same color names as candy.json; the dongle has no light theme, so the dongle-only tokens (radii, fonts) aren't here. Design Tokens Format (DTCG): colors are sRGB hex.",
   "color": {
     "$type": "color",
     "background": { "$value": "#F4F5FB", "$description": "Screen background (cool off-white)" },
@@ -8,9 +8,20 @@
     "text-dim": { "$value": "#5A5F86", "$description": "Secondary text, labels" },
     "accent": { "$value": "#3F5FE0", "$description": "Focus and headers" },
     "on-accent": { "$value": "#FFFFFF", "$description": "Text and icons on accent, good, bad and warn" },
+    "on-app": { "$value": "#15172B", "$description": "Text and icons on app colors" },
     "good": { "$value": "#13804A", "$description": "Approve, success, connected computer" },
     "bad": { "$value": "#C93434", "$description": "Erase, errors, refusals" },
     "warn": { "$value": "#8A6200", "$description": "Warnings, locked profile" },
-    "bluetooth-connected": { "$value": "#1F6FE0", "$description": "Bluetooth symbol while a phone is connected" }
+    "bluetooth-connected": { "$value": "#1F6FE0", "$description": "Bluetooth symbol while a phone is connected" },
+    "app": {
+      "$description": "The same vivid colors as candy.json, used as fills with on-app text",
+      "1": { "$value": "#FFD166" },
+      "2": { "$value": "#FF6B6B" },
+      "3": { "$value": "#4ECDC4" },
+      "4": { "$value": "#5BC0EB" },
+      "5": { "$value": "#B28DFF" },
+      "6": { "$value": "#FF9F43" },
+      "7": { "$value": "#F78FB3" }
+    }
   }
 }

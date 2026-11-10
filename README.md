@@ -6,7 +6,7 @@ look like one product without copying values between them.
 - `tokens/candy.json`: Candy, the dongle's default theme: palette, the app colors, corner radii and
   fonts.
 - `tokens/candy-light.json`: Candy for light backgrounds, for the hub in the phone's light mode:
-  the same color names as `candy.json`, without the dongle-only tokens.
+  the same color names as `candy.json`, without radii and fonts.
 - `tokens/led.json`: the status LED's colors, the same in every theme, so the hub can show the LED's
   state in the colors the dongle uses.
 
@@ -56,12 +56,13 @@ generated: render them from the SVGs at the size needed.
 
 - A theme is one tokens file. Other themes, and later themes the dongle loads from files, use the
   same token names.
-- Radii (`radius.*`, `tile-radius-ratio`) and the app colors are for the dongle's 160x80 screen; the
-  hub keeps its platform's own shapes.
-- Text and icons on accent, good, bad and warn use `on-accent`. Light variants meet WCAG contrast:
-  4.5:1 for text colors, 3:1 for icons.
-- Apps don't have colors of their own: a theme gives Settings its color and lists app colors that
-  the other apps take in launcher order, so apps added later get one too.
+- Radii (`radius.*`, `tile-radius-ratio`) are sized for the dongle's 160x80 screen. A project that
+  offers Candy's shapes as a style scales them to its own screen.
+- Text and icons on accent, good, bad and warn use `on-accent`; on app colors, `on-app`. Light
+  variants meet WCAG contrast: 4.5:1 for text colors, 3:1 for icons.
+- The app colors are a plain list that knows nothing about apps or screens. Each project assigns
+  them by position (for example Settings first, then the apps in launcher order, starting over
+  after the last), so adding or removing items never changes this repository.
 - Tokens are renamed or removed only together with the projects that use them, since their builds
   break otherwise.
 
